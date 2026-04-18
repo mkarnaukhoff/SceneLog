@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SceneLog — Detective Division Checklist</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #14181d;
+      --panel-2: #1a2027;
+      --ink: #e9edf2;
+      --muted: #a3adb8;
+      --line: #2a3139;
+      --accent: #9fb3c8;
+      --danger: #d16060;
+      --ok: #77b38f;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #0f1318, #090c10);
+      color: var(--ink);
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    header {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .title {
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 8px;
+    }
+
+    button, select, input, textarea {
+      width: 100%;
+      min-height: 38px;
+      background: var(--panel-2);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    button:hover, select:hover, input:hover, textarea:hover { border-color: #465362; }
+
+    .btn-primary { background: #203246; border-color: #35526d; }
+    .btn-danger { background: #352123; border-color: #623739; color: #ffc5c5; }
+
+    .c2 { grid-column: span 2; }
+    .c3 { grid-column: span 3; }
+    .c4 { grid-column: span 4; }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .progress-shell {
+      display: grid;
+      gap: 5px;
+    }
+
+    .progress-line {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #0f1216;
+      overflow: hidden;
+    }
+
+    .progress-line > span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #44576b, #7ea0c3);
+      transition: width .2s;
+    }
+
+    .required-note {
+      font-size: 12px;
+      color: #ffcc7d;
+      background: #332714;
+      border: 1px dashed #6e5530;
+      border-radius: 8px;
+      padding: 8px;
+      display: none;
+    }
+
+    .required-note.show { display: block; }
+
+    main {
+      display: grid;
+      gap: 10px;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      font-size: 13px;
+      background: #171d24;
+      border-bottom: 1px solid var(--line);
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    .section-body {
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #141a21;
+      padding: 8px;
+    }
+
+    .field > label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      background: #12171d;
+      font-size: 13px;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      min-height: auto;
+      accent-color: var(--ok);
+      margin: 0;
+    }
+
+    .warning-text {
+      font-size: 12px;
+      color: #ffd49e;
+      border-left: 2px solid #92683b;
+      padding-left: 8px;
+      margin: 4px 0;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 900px) {
+      .c2, .c3, .c4 { grid-column: span 6; }
+    }
+
+    @media (max-width: 660px) {
+      .toolbar > * { grid-column: span 12 !important; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .app { max-width: 100%; padding: 0; }
+      header, .toolbar { display: none !important; }
+      details { border: 1px solid #aaa; background: #fff; break-inside: avoid; }
+      summary { background: #f2f2f2; color: #111; }
+      .check, .field { border-color: #cfcfcf; background: #fff; }
+      textarea, input, select { border-color: #bbb; color: #111; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title">Detective Division Checklist · LAPD/LASD Style</div>
+      <div class="toolbar">
+        <button id="newCaseBtn" class="c2 btn-primary">Новый кейс</button>
+        <select id="caseSelect" class="c4" aria-label="Список кейсов"></select>
+        <button id="duplicateBtn" class="c2">Дублировать</button>
+        <button id="archiveBtn" class="c2">Архив</button>
+        <button id="deleteBtn" class="c2 btn-danger">Удалить</button>
+
+        <button id="exportPdfBtn" class="c3 btn-primary">Экспорт PDF</button>
+        <button id="clearBtn" class="c3 btn-danger">Очистить данные</button>
+      </div>
+
+      <div class="meta">
+        <span id="idMeta">ID: —</span>
+        <span id="createdMeta">Создан: —</span>
+        <span id="updatedMeta">Сохранён: —</span>
+        <span id="statusMeta">Статус: —</span>
+      </div>
+
+      <div class="progress-shell">
+        <div class="meta"><span id="progressText">Прогресс: 0%</span></div>
+        <div class="progress-line"><span id="progressBar"></span></div>
+        <div id="requiredNote" class="required-note">Заполните обязательные поля: данные жертвы, дата, место, назначенный детектив.</div>
+      </div>
+    </header>
+
+    <main id="accordion"></main>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      /**
+       * Полностью автономное приложение для локального использования.
+       * Все данные кейсов хранятся в localStorage.
+       */
+      const STORAGE_KEY = 'scenelog_cases_v2';
+      const SAVE_DELAY = 300;
+
+      /** Конфигурация этапов: минимум лишних полей, максимальная поэтапность. */
+      const SECTIONS = [
+        {
+          id: 'general',
+          title: '1. Общая информация',
+          fields: [
+            { key: 'victim', label: 'Данные жертвы', type: 'textarea', required: true },
+            { key: 'incidentDate', label: 'Дата происшествия', type: 'input', inputType: 'date', required: true },
+            { key: 'location', label: 'Место происшествия', type: 'input', required: true },
+            { key: 'detectives', label: 'Назначенный(е) детектив(ы)', type: 'input', required: true },
+          ],
+          checks: [
+            'Не полагайтесь на память, записывайте всю информацию',
+            'Не изменяйте позицию улик до фото/отпечатков/описания криминалистами',
+          ],
+          warning: 'ВНИМАНИЕ: проверки ниже начинаются с момента прибытия на инцидент. Поиски подозреваемого/свидетелей (кроме экстренных) — только с согласием или ордером (Решение Минси).',
+        },
+        {
+          id: 'arrival',
+          title: '2. Прибытие и первичная оценка',
+          checks: [
+            'Записано время прибытия',
+            'Записаны погодные условия',
+            'Записаны условия освещения',
+            'Опрошены офицеры, прикреплённые к инциденту',
+            'Определено местоположение и состояние жертвы',
+            'Определено местоположение и состояние подозреваемого',
+            'Проверено, требуется ли скорая помощь',
+            'Проверено корректное установление периметра',
+            'Установлено наличие свидетелей и их раздельность',
+          ],
+          fields: [
+            { key: 'notes', label: 'Краткие служебные заметки этапа', type: 'textarea' },
+          ],
+        },
+        {
+          id: 'scene',
+          title: '3. Контроль места происшествия',
+          warning: 'ВНИМАНИЕ: доступ на место происшествия должен быть строго ограничен для всех, включая патрульных офицеров.',
+          checks: [
+            'Периметр обновлён при необходимости',
+            'Все улики обозначены',
+            'Установлен контроль улик до приезда криминалистов',
+            'Доступ незамедлительно ограничен',
+            'Назначен единый вход на место происшествия',
+            'Назначен офицер контроля входа',
+            'Записаны улики/части тела, передвинутые патрульными',
+            'Тело с признаками смерти не передвигалось',
+          ],
+          fields: [
+            { key: 'accessLog', label: 'Лог доступа (кто/когда)', type: 'textarea' },
+          ],
+        },
+        {
+          id: 'suspect',
+          title: '4. Информация о подозреваемом',
+          warning: 'Используется, если подозреваемый взят под стражу на месте или рядом. Блок допроса заполняйте при фактическом допросе.',
+          checks: [
+            'Улики при подозреваемом обезопасены и задокументированы',
+            'Подозреваемый не мыл руки',
+            'С рук взяты образцы (порох и т.п.) при необходимости',
+            'Назначен офицер сопровождения под стражей',
+            'Подозреваемый изолирован от места, свидетелей, наблюдателей',
+            'Зафиксировано эмоциональное состояние подозреваемого',
+            'Записаны спонтанные заявления',
+            'Разъяснены права и подтверждено понимание',
+            'Получен отказ, если подозреваемый отказался от допроса',
+            'Допрос записывался аудио/видео (если возможно)',
+            'Запрошено и проверяется алиби',
+          ],
+          fields: [
+            { key: 'statements', label: 'Ключевые заявления / алиби (кратко)', type: 'textarea' },
+          ],
+        },
+        {
+          id: 'forensics',
+          title: '5. Взаимодействие с криминалистами',
+          checks: [
+            'Получена/задокументирована документация о теле и уликах',
+            'Личный состав уведомлён о запретах (не курить/не есть/не трогать оборудование и т.д.)',
+            'Электроприборы на месте задокументированы',
+            'Имена всех входивших/выходивших задокументированы',
+          ],
+          fields: [
+            { key: 'notes', label: 'Служебные заметки этапа', type: 'textarea' },
+          ],
+        },
+        {
+          id: 'evidence',
+          title: '6. Взаимодействие с уликами',
+          checks: [
+            'Все улики идентифицированы',
+            'Каждой улике присвоен уникальный номер',
+            'Фото места сделаны и также имеют уникальные номера',
+            'Улики задокументированы (изъятие/положение/у кого изъяты)',
+            'Улики хранятся раздельно в корректной упаковке',
+            'Зафиксированы офицер и номер жетона транспортировки улик',
+            'Назначены уникальные номера свидетелей и подозреваемого',
+            'При наличии ДНК/отпечатков выполнена идентификация и запись источника',
+            'При наличии тела: зафиксирован прибытие эксперта/коронера и отчёты',
+            'Проверена окружающая среда на следы крови',
+          ],
+          fields: [
+            { key: 'evidenceRegistry', label: 'Краткий реестр улик', type: 'textarea' },
+          ],
+        },
+        {
+          id: 'witnesses',
+          title: '7. Взаимодействие со свидетелями',
+          checks: [
+            'Собраны контактные данные свидетелей',
+            'Собраны личные данные свидетелей',
+            'Свидетели уведомлены о возможном вызове на допрос',
+            'Обеспечен трансфер в участок при необходимости',
+            'Разъяснена анонимность для суда/подозреваемого',
+            'Разъяснена ответственность за ложные показания',
+            'Разъяснён процессуальный статус свидетеля (не подозреваемый)',
+          ],
+          fields: [
+            { key: 'notes', label: 'Заметки по свидетелям', type: 'textarea' },
+          ],
+        },
+        {
+          id: 'finalization',
+          title: '8. Завершение расследования',
+          checks: [
+            'Опрос свидетелей завершён',
+            'Допрос завершён',
+            'Рапорт ответственному детективу составлен',
+          ],
+          fields: [
+            {
+              key: 'status',
+              label: 'Статус дела',
+              type: 'select',
+              options: [
+                { value: 'open', text: 'Открыт' },
+                { value: 'closed', text: 'Закрыт' },
+                { value: 'archived', text: 'Архив' },
+              ],
+            },
+            { key: 'finalReport', label: 'Итоговый рапорт (кратко)', type: 'textarea' },
+          ],
+        },
+      ];
+
+      const refs = {
+        accordion: document.getElementById('accordion'),
+        caseSelect: document.getElementById('caseSelect'),
+        newCaseBtn: document.getElementById('newCaseBtn'),
+        duplicateBtn: document.getElementById('duplicateBtn'),
+        archiveBtn: document.getElementById('archiveBtn'),
+        deleteBtn: document.getElementById('deleteBtn'),
+        clearBtn: document.getElementById('clearBtn'),
+        exportPdfBtn: document.getElementById('exportPdfBtn'),
+        idMeta: document.getElementById('idMeta'),
+        createdMeta: document.getElementById('createdMeta'),
+        updatedMeta: document.getElementById('updatedMeta'),
+        statusMeta: document.getElementById('statusMeta'),
+        progressText: document.getElementById('progressText'),
+        progressBar: document.getElementById('progressBar'),
+        requiredNote: document.getElementById('requiredNote'),
+      };
+
+      const state = {
+        cases: [],
+        activeCaseId: null,
+        timer: null,
+      };
+
+      const isoNow = () => new Date().toISOString();
+      const formatDT = (v) => (v ? new Date(v).toLocaleString('ru-RU') : '—');
+
+      function emptyCase() {
+        const model = {
+          id: String(Date.now()),
+          created: isoNow(),
+          updated: isoNow(),
+          status: 'open',
+          sections: {},
+          checklistCompletion: {},
+        };
+
+        SECTIONS.forEach((section) => {
+          model.sections[section.id] = {};
+          model.checklistCompletion[section.id] = [];
+
+          (section.fields || []).forEach((field) => {
+            model.sections[section.id][field.key] = field.key === 'status' ? 'open' : '';
+          });
+
+          (section.checks || []).forEach(() => model.checklistCompletion[section.id].push(false));
+        });
+
+        return model;
+      }
+
+      function load() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed.cases)) {
+              state.cases = parsed.cases;
+              state.activeCaseId = parsed.activeCaseId || parsed.cases[0]?.id || null;
+            }
+          } catch {
+            // Игнорируем повреждённое состояние и переинициализируем ниже.
+          }
+        }
+
+        if (!state.cases.length) {
+          const first = emptyCase();
+          state.cases = [first];
+          state.activeCaseId = first.id;
+          saveNow();
+        }
+      }
+
+      function saveNow() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ cases: state.cases, activeCaseId: state.activeCaseId }));
+      }
+
+      function scheduleSave() {
+        clearTimeout(state.timer);
+        state.timer = setTimeout(() => {
+          const c = getActiveCase();
+          if (!c) return;
+          c.updated = isoNow();
+          c.status = c.sections.finalization?.status || c.status || 'open';
+          saveNow();
+          renderHeader();
+          renderCaseList();
+        }, SAVE_DELAY);
+      }
+
+      function getActiveCase() {
+        return state.cases.find((c) => c.id === state.activeCaseId) || null;
+      }
+
+      function requiredMissing(c) {
+        const g = c.sections.general || {};
+        return !g.victim?.trim() || !g.incidentDate || !g.location?.trim() || !g.detectives?.trim();
+      }
+
+      function calcProgress(c) {
+        let total = 0;
+        let done = 0;
+
+        SECTIONS.forEach((section) => {
+          (section.checks || []).forEach((_, idx) => {
+            total += 1;
+            if (Boolean(c.checklistCompletion?.[section.id]?.[idx])) done += 1;
+          });
+          (section.fields || []).forEach((f) => {
+            total += 1;
+            const val = c.sections?.[section.id]?.[f.key];
+            const isFilled = typeof val === 'string' ? val.trim().length > 0 : Boolean(val);
+            if (isFilled) done += 1;
+          });
+        });
+
+        return total ? Math.round((done / total) * 100) : 0;
+      }
+
+      function renderCaseList() {
+        refs.caseSelect.innerHTML = '';
+        state.cases.forEach((c) => {
+          const opt = document.createElement('option');
+          const victim = c.sections?.general?.victim?.trim() || 'Без имени жертвы';
+          opt.value = c.id;
+          opt.textContent = `${c.id} · ${victim.slice(0, 40)} · ${c.status || 'open'}`;
+          refs.caseSelect.appendChild(opt);
+        });
+        refs.caseSelect.value = state.activeCaseId || '';
+      }
+
+      function renderHeader() {
+        const c = getActiveCase();
+        if (!c) return;
+        refs.idMeta.textContent = `ID: ${c.id}`;
+        refs.createdMeta.textContent = `Создан: ${formatDT(c.created)}`;
+        refs.updatedMeta.textContent = `Сохранён: ${formatDT(c.updated)}`;
+        refs.statusMeta.textContent = `Статус: ${c.status || 'open'}`;
+
+        const progress = calcProgress(c);
+        refs.progressText.textContent = `Прогресс: ${progress}%`;
+        refs.progressBar.style.width = `${progress}%`;
+        refs.requiredNote.classList.toggle('show', requiredMissing(c));
+      }
+
+      function createInput(sectionId, field, value) {
+        const fieldWrap = document.createElement('div');
+        fieldWrap.className = 'field';
+
+        const label = document.createElement('label');
+        label.textContent = field.label + (field.required ? ' *' : '');
+
+        let control;
+        if (field.type === 'textarea') {
+          control = document.createElement('textarea');
+          control.value = value || '';
+        } else if (field.type === 'select') {
+          control = document.createElement('select');
+          field.options.forEach((o) => {
+            const opt = document.createElement('option');
+            opt.value = o.value;
+            opt.textContent = o.text;
+            control.appendChild(opt);
+          });
+          control.value = value || field.options[0].value;
+        } else {
+          control = document.createElement('input');
+          control.type = field.inputType || 'text';
+          control.value = value || '';
+        }
+
+        control.dataset.section = sectionId;
+        control.dataset.field = field.key;
+        fieldWrap.append(label, control);
+        return fieldWrap;
+      }
+
+      function renderForm() {
+        const c = getActiveCase();
+        if (!c) return;
+
+        refs.accordion.innerHTML = '';
+
+        SECTIONS.forEach((section, idx) => {
+          const details = document.createElement('details');
+          details.open = idx === 0;
+
+          const summary = document.createElement('summary');
+          summary.textContent = section.title;
+
+          const body = document.createElement('div');
+          body.className = 'section-body';
+
+          if (section.warning) {
+            const w = document.createElement('div');
+            w.className = 'warning-text';
+            w.textContent = section.warning;
+            body.appendChild(w);
+          }
+
+          (section.fields || []).forEach((field) => {
+            const value = c.sections?.[section.id]?.[field.key] || '';
+            body.appendChild(createInput(section.id, field, value));
+          });
+
+          (section.checks || []).forEach((title, index) => {
+            const row = document.createElement('label');
+            row.className = 'check';
+            const check = document.createElement('input');
+            check.type = 'checkbox';
+            check.checked = Boolean(c.checklistCompletion?.[section.id]?.[index]);
+            check.dataset.checkSection = section.id;
+            check.dataset.checkIndex = String(index);
+            const text = document.createElement('span');
+            text.textContent = title;
+            row.append(check, text);
+            body.appendChild(row);
+          });
+
+          details.append(summary, body);
+          refs.accordion.appendChild(details);
+        });
+      }
+
+      function onFieldChange(event) {
+        const c = getActiveCase();
+        if (!c) return;
+        const t = event.target;
+
+        if (t.dataset.section && t.dataset.field) {
+          c.sections[t.dataset.section][t.dataset.field] = t.value;
+          scheduleSave();
+          renderHeader();
+          return;
+        }
+
+        if (t.dataset.checkSection) {
+          const idx = Number(t.dataset.checkIndex);
+          c.checklistCompletion[t.dataset.checkSection][idx] = t.checked;
+          scheduleSave();
+          renderHeader();
+        }
+      }
+
+      function row(label, value) {
+        return `<tr><td>${label}</td><td>${value ? String(value).replace(/\n/g, '<br>') : '—'}</td></tr>`;
+      }
+
+      /**
+       * Экспорт в PDF реализован нативно: генерируем печатный рапорт
+       * и вызываем окно печати (Save as PDF).
+       */
+      function exportPdf() {
+        const c = getActiveCase();
+        if (!c) return;
+        if (requiredMissing(c)) {
+          alert('Внимание: обязательные поля заполнены не полностью. Экспорт PDF продолжен.');
+        }
+
+        const htmlSections = SECTIONS.map((section) => {
+          const fieldsRows = (section.fields || []).map((f) => row(f.label, c.sections?.[section.id]?.[f.key])).join('');
+          const checksRows = (section.checks || []).map((text, idx) => row(`☑ ${text}`, c.checklistCompletion?.[section.id]?.[idx] ? 'Выполнено' : 'Не выполнено')).join('');
+          return `
+            <section>
+              <h2>${section.title}</h2>
+              ${section.warning ? `<p class="warn">${section.warning}</p>` : ''}
+              <table>
+                <tbody>
+                  ${fieldsRows}
+                  ${checksRows}
+                </tbody>
+              </table>
+            </section>
+          `;
+        }).join('');
+
+        const report = `<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Case ${c.id}</title>
+<style>
+  body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.35}
+  h1{font-size:20px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em}
+  .meta{font-size:12px;color:#333;margin-bottom:14px}
+  h2{font-size:14px;text-transform:uppercase;border:1px solid #666;padding:6px 8px;margin:16px 0 0;background:#f1f1f1}
+  .warn{font-size:12px;margin:8px 0;color:#2f2f2f}
+  table{width:100%;border-collapse:collapse;margin-top:0}
+  td{border:1px solid #999;padding:6px 8px;vertical-align:top;font-size:12px}
+  td:first-child{width:42%;font-weight:700;background:#fafafa}
+</style>
+</head>
+<body>
+  <h1>Detective Division Investigation Report</h1>
+  <div class="meta">
+    Case ID: ${c.id}<br>
+    Created: ${formatDT(c.created)}<br>
+    Updated: ${formatDT(c.updated)}<br>
+    Status: ${c.status}
+  </div>
+  ${htmlSections}
+</body>
+</html>`;
+
+        const w = window.open('', '_blank');
+        if (!w) {
+          alert('Не удалось открыть окно печати. Разрешите popup для этого файла.');
+          return;
+        }
+        w.document.open();
+        w.document.write(report);
+        w.document.close();
+        w.focus();
+        setTimeout(() => w.print(), 250);
+      }
+
+      function bindEvents() {
+        refs.caseSelect.addEventListener('change', () => {
+          state.activeCaseId = refs.caseSelect.value;
+          saveNow();
+          renderHeader();
+          renderForm();
+        });
+
+        refs.newCaseBtn.addEventListener('click', () => {
+          const c = emptyCase();
+          state.cases.unshift(c);
+          state.activeCaseId = c.id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
+          renderForm();
+        });
+
+        refs.duplicateBtn.addEventListener('click', () => {
+          const c = getActiveCase();
+          if (!c) return;
+          const copy = JSON.parse(JSON.stringify(c));
+          copy.id = `${Date.now()}-copy`;
+          copy.created = isoNow();
+          copy.updated = isoNow();
+          state.cases.unshift(copy);
+          state.activeCaseId = copy.id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
+          renderForm();
+        });
+
+        refs.archiveBtn.addEventListener('click', () => {
+          const c = getActiveCase();
+          if (!c) return;
+          c.status = 'archived';
+          c.sections.finalization.status = 'archived';
+          scheduleSave();
+          renderHeader();
+          renderCaseList();
+          renderForm();
+        });
+
+        refs.deleteBtn.addEventListener('click', () => {
+          const c = getActiveCase();
+          if (!c) return;
+          if (!confirm(`Удалить кейс ${c.id}?`)) return;
+          state.cases = state.cases.filter((x) => x.id !== c.id);
+          if (!state.cases.length) state.cases = [emptyCase()];
+          state.activeCaseId = state.cases[0].id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
+          renderForm();
+        });
+
+        refs.clearBtn.addEventListener('click', () => {
+          if (!confirm('Очистить все кейсы из localStorage?')) return;
+          localStorage.removeItem(STORAGE_KEY);
+          state.cases = [emptyCase()];
+          state.activeCaseId = state.cases[0].id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
+          renderForm();
+        });
+
+        refs.exportPdfBtn.addEventListener('click', exportPdf);
+
+        refs.accordion.addEventListener('input', onFieldChange);
+        refs.accordion.addEventListener('change', onFieldChange);
+      }
+
+      function init() {
+        load();
+        renderCaseList();
+        renderHeader();
+        renderForm();
+        bindEvents();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
