@@ -3,255 +3,254 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SceneLog — Детективный дивизион</title>
+  <title>SceneLog — Detective Division Checklist</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --panel: #161b22;
-      --panel-2: #1f2630;
-      --text: #e6edf3;
-      --muted: #9da7b2;
-      --accent: #2f81f7;
-      --accent-2: #58a6ff;
-      --danger: #f85149;
-      --warn: #d29922;
-      --ok: #3fb950;
-      --border: #30363d;
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-      --radius: 12px;
+      --bg: #0b0d10;
+      --panel: #14181d;
+      --panel-2: #1a2027;
+      --ink: #e9edf2;
+      --muted: #a3adb8;
+      --line: #2a3139;
+      --accent: #9fb3c8;
+      --danger: #d16060;
+      --ok: #77b38f;
+      --radius: 10px;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(circle at top, #111827 0%, var(--bg) 50%);
-      color: var(--text);
-      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #0f1318, #090c10);
+      color: var(--ink);
     }
 
     .app {
-      max-width: 1280px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 14px;
       display: grid;
-      gap: 16px;
+      gap: 12px;
     }
 
     header {
-      background: linear-gradient(180deg, #131a23, #10161d);
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 12px;
+      background: var(--panel);
+      padding: 10px;
       display: grid;
       gap: 10px;
+    }
+
+    .title {
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 13px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
     }
 
     .toolbar {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 8px;
-      align-items: center;
     }
 
-    .toolbar > * { min-height: 38px; }
-
-    .toolbar .wide { grid-column: span 3; }
-    .toolbar .xwide { grid-column: span 4; }
-    .toolbar .grow { grid-column: span 12; }
-
-    button,
-    select,
-    input,
-    textarea {
+    button, select, input, textarea {
       width: 100%;
-      background: var(--panel);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
+      min-height: 38px;
+      background: var(--panel-2);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
       font-size: 14px;
-      transition: border-color 0.2s ease, transform 0.02s ease;
     }
-
-    textarea { min-height: 86px; resize: vertical; }
 
     button {
       cursor: pointer;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .03em;
     }
 
-    button:hover, select:hover, input:hover, textarea:hover { border-color: var(--accent); }
-    button:active { transform: translateY(1px); }
+    button:hover, select:hover, input:hover, textarea:hover { border-color: #465362; }
 
-    .btn-primary { background: linear-gradient(180deg, var(--accent-2), var(--accent)); color: #fff; border: none; }
-    .btn-danger { background: #2a1515; border-color: #5a2727; color: #ffb4b1; }
-    .btn-warning { background: #2c2414; border-color: #6f5625; color: #ffd38b; }
+    .btn-primary { background: #203246; border-color: #35526d; }
+    .btn-danger { background: #352123; border-color: #623739; color: #ffc5c5; }
+
+    .c2 { grid-column: span 2; }
+    .c3 { grid-column: span 3; }
+    .c4 { grid-column: span 4; }
 
     .meta {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      font-size: 13px;
       color: var(--muted);
-      padding: 4px 2px;
+      font-size: 12px;
     }
 
-    .progress-wrap {
+    .progress-shell {
       display: grid;
-      gap: 6px;
+      gap: 5px;
     }
 
-    .progress-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .progress {
+    .progress-line {
       width: 100%;
       height: 10px;
-      background: #0e1319;
-      border: 1px solid var(--border);
       border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #0f1216;
       overflow: hidden;
     }
 
-    .progress > span {
+    .progress-line > span {
       display: block;
-      height: 100%;
       width: 0;
-      background: linear-gradient(90deg, #1f6feb, #3fb950);
-      transition: width 0.2s ease;
+      height: 100%;
+      background: linear-gradient(90deg, #44576b, #7ea0c3);
+      transition: width .2s;
     }
+
+    .required-note {
+      font-size: 12px;
+      color: #ffcc7d;
+      background: #332714;
+      border: 1px dashed #6e5530;
+      border-radius: 8px;
+      padding: 8px;
+      display: none;
+    }
+
+    .required-note.show { display: block; }
 
     main {
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
     details {
-      background: #10161e;
-      border: 1px solid var(--border);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
+      background: var(--panel);
       overflow: hidden;
     }
 
     summary {
-      list-style: none;
       cursor: pointer;
-      user-select: none;
-      padding: 12px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      list-style: none;
+      padding: 12px;
       font-weight: 700;
-      background: linear-gradient(180deg, #18212d, #131b25);
-      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      font-size: 13px;
+      background: #171d24;
+      border-bottom: 1px solid var(--line);
     }
 
     summary::-webkit-details-marker { display: none; }
 
     .section-body {
-      padding: 14px;
+      padding: 10px;
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
 
     .field {
       display: grid;
-      grid-template-columns: 1.2fr minmax(0, 2fr) auto;
-      gap: 8px;
-      align-items: center;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #141a21;
       padding: 8px;
     }
 
-    .field label {
-      color: #c9d1d9;
-      font-size: 14px;
-      font-weight: 600;
+    .field > label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--muted);
+      font-weight: 700;
     }
 
-    .done {
+    .check {
       display: flex;
       align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      color: var(--muted);
-      font-size: 13px;
-      padding: 6px 8px;
-      border: 1px solid var(--border);
+      gap: 8px;
+      border: 1px solid var(--line);
       border-radius: 8px;
-      background: #0f141b;
+      padding: 8px;
+      background: #12171d;
+      font-size: 13px;
     }
 
-    .done input {
-      width: 16px;
-      height: 16px;
+    .check input {
+      width: 18px;
+      height: 18px;
+      min-height: auto;
       accent-color: var(--ok);
       margin: 0;
     }
 
-    .empty-hint {
-      border: 1px dashed #60442a;
-      color: #ffbf66;
-      background: #2c1f14;
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 13px;
-      display: none;
+    .warning-text {
+      font-size: 12px;
+      color: #ffd49e;
+      border-left: 2px solid #92683b;
+      padding-left: 8px;
+      margin: 4px 0;
+      line-height: 1.4;
     }
 
-    .show { display: block; }
-
-    @media (max-width: 980px) {
-      .toolbar .wide, .toolbar .xwide { grid-column: span 6; }
+    @media (max-width: 900px) {
+      .c2, .c3, .c4 { grid-column: span 6; }
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 660px) {
       .toolbar > * { grid-column: span 12 !important; }
-      .field { grid-template-columns: 1fr; }
-      .done { justify-content: flex-start; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .app { max-width: 100%; padding: 0; }
+      header, .toolbar { display: none !important; }
+      details { border: 1px solid #aaa; background: #fff; break-inside: avoid; }
+      summary { background: #f2f2f2; color: #111; }
+      .check, .field { border-color: #cfcfcf; background: #fff; }
+      textarea, input, select { border-color: #bbb; color: #111; background: #fff; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <header>
+      <div class="title">Detective Division Checklist · LAPD/LASD Style</div>
       <div class="toolbar">
-        <button id="newCaseBtn" class="btn-primary wide">Новый кейс</button>
-        <select id="caseSelect" class="xwide" aria-label="Список кейсов"></select>
-        <button id="duplicateBtn" class="wide">Дублировать</button>
-        <button id="archiveBtn" class="wide btn-warning">Архивировать</button>
-        <button id="deleteBtn" class="wide btn-danger">Удалить</button>
+        <button id="newCaseBtn" class="c2 btn-primary">Новый кейс</button>
+        <select id="caseSelect" class="c4" aria-label="Список кейсов"></select>
+        <button id="duplicateBtn" class="c2">Дублировать</button>
+        <button id="archiveBtn" class="c2">Архив</button>
+        <button id="deleteBtn" class="c2 btn-danger">Удалить</button>
 
-        <button id="exportJsonBtn" class="wide">Экспорт JSON</button>
-        <button id="exportReportBtn" class="wide">Экспорт рапорт (MD/TXT)</button>
-        <button id="importBtn" class="wide">Импорт</button>
-        <button id="clearBtn" class="wide btn-danger">Очистить данные</button>
-        <input id="importFile" type="file" accept="application/json,.json" hidden />
+        <button id="exportPdfBtn" class="c3 btn-primary">Экспорт PDF</button>
+        <button id="clearBtn" class="c3 btn-danger">Очистить данные</button>
       </div>
 
       <div class="meta">
-        <span id="caseIdMeta">ID: —</span>
+        <span id="idMeta">ID: —</span>
         <span id="createdMeta">Создан: —</span>
         <span id="updatedMeta">Сохранён: —</span>
+        <span id="statusMeta">Статус: —</span>
       </div>
 
-      <div class="progress-wrap">
-        <div class="progress-row">
-          <strong>Прогресс заполнения</strong>
-          <span id="progressText">0%</span>
-        </div>
-        <div class="progress" aria-label="Прогресс кейса"><span id="progressBar"></span></div>
-        <div id="requiredHint" class="empty-hint">⚠️ Обязательные поля не заполнены: жертва, дата, место или детектив.</div>
+      <div class="progress-shell">
+        <div class="meta"><span id="progressText">Прогресс: 0%</span></div>
+        <div class="progress-line"><span id="progressBar"></span></div>
+        <div id="requiredNote" class="required-note">Заполните обязательные поля: данные жертвы, дата, место, назначенный детектив.</div>
       </div>
     </header>
 
@@ -263,88 +262,143 @@
       'use strict';
 
       /**
-       * SceneLog
-       * Автономный менеджер расследований для локального запуска.
-       * Вся логика закрыта в IIFE, чтобы не загрязнять глобальный scope.
+       * Полностью автономное приложение для локального использования.
+       * Все данные кейсов хранятся в localStorage.
        */
+      const STORAGE_KEY = 'scenelog_cases_v2';
+      const SAVE_DELAY = 300;
 
-      const STORAGE_KEY = 'scenelog_cases_v1';
-      const STATE = {
-        cases: [],
-        activeCaseId: null,
-        saveTimer: null,
-      };
-
+      /** Конфигурация этапов: минимум лишних полей, максимальная поэтапность. */
       const SECTIONS = [
         {
           id: 'general',
-          title: '1. 📑 Общая информация',
+          title: '1. Общая информация',
           fields: [
             { key: 'victim', label: 'Данные жертвы', type: 'textarea', required: true },
             { key: 'incidentDate', label: 'Дата происшествия', type: 'input', inputType: 'date', required: true },
-            { key: 'location', label: 'Место', type: 'input', required: true },
-            { key: 'detective', label: 'Назначенный детектив', type: 'input', required: true },
+            { key: 'location', label: 'Место происшествия', type: 'input', required: true },
+            { key: 'detectives', label: 'Назначенный(е) детектив(ы)', type: 'input', required: true },
+          ],
+          checks: [
+            'Не полагайтесь на память, записывайте всю информацию',
+            'Не изменяйте позицию улик до фото/отпечатков/описания криминалистами',
+          ],
+          warning: 'ВНИМАНИЕ: проверки ниже начинаются с момента прибытия на инцидент. Поиски подозреваемого/свидетелей (кроме экстренных) — только с согласием или ордером (Решение Минси).',
+        },
+        {
+          id: 'arrival',
+          title: '2. Прибытие и первичная оценка',
+          checks: [
+            'Записано время прибытия',
+            'Записаны погодные условия',
+            'Записаны условия освещения',
+            'Опрошены офицеры, прикреплённые к инциденту',
+            'Определено местоположение и состояние жертвы',
+            'Определено местоположение и состояние подозреваемого',
+            'Проверено, требуется ли скорая помощь',
+            'Проверено корректное установление периметра',
+            'Установлено наличие свидетелей и их раздельность',
+          ],
+          fields: [
+            { key: 'notes', label: 'Краткие служебные заметки этапа', type: 'textarea' },
           ],
         },
         {
           id: 'scene',
-          title: '2. 📍 Контроль места происшествия',
+          title: '3. Контроль места происшествия',
+          warning: 'ВНИМАНИЕ: доступ на место происшествия должен быть строго ограничен для всех, включая патрульных офицеров.',
+          checks: [
+            'Периметр обновлён при необходимости',
+            'Все улики обозначены',
+            'Установлен контроль улик до приезда криминалистов',
+            'Доступ незамедлительно ограничен',
+            'Назначен единый вход на место происшествия',
+            'Назначен офицер контроля входа',
+            'Записаны улики/части тела, передвинутые патрульными',
+            'Тело с признаками смерти не передвигалось',
+          ],
           fields: [
-            { key: 'arrivalTime', label: 'Время прибытия', type: 'input', inputType: 'datetime-local' },
-            { key: 'weather', label: 'Погода', type: 'input' },
-            { key: 'lighting', label: 'Освещение', type: 'input' },
-            { key: 'perimeter', label: 'Периметр', type: 'textarea' },
-            { key: 'witnesses', label: 'Свидетели', type: 'textarea' },
-            { key: 'accessLog', label: 'Лог доступа', type: 'textarea' },
+            { key: 'accessLog', label: 'Лог доступа (кто/когда)', type: 'textarea' },
           ],
         },
         {
           id: 'suspect',
-          title: '3. 🕵️ Информация о подозреваемом',
+          title: '4. Информация о подозреваемом',
+          warning: 'Используется, если подозреваемый взят под стражу на месте или рядом. Блок допроса заполняйте при фактическом допросе.',
+          checks: [
+            'Улики при подозреваемом обезопасены и задокументированы',
+            'Подозреваемый не мыл руки',
+            'С рук взяты образцы (порох и т.п.) при необходимости',
+            'Назначен офицер сопровождения под стражей',
+            'Подозреваемый изолирован от места, свидетелей, наблюдателей',
+            'Зафиксировано эмоциональное состояние подозреваемого',
+            'Записаны спонтанные заявления',
+            'Разъяснены права и подтверждено понимание',
+            'Получен отказ, если подозреваемый отказался от допроса',
+            'Допрос записывался аудио/видео (если возможно)',
+            'Запрошено и проверяется алиби',
+          ],
           fields: [
-            { key: 'detention', label: 'Задержание', type: 'textarea' },
-            { key: 'evidenceOnSuspect', label: 'Улики на подозреваемом', type: 'textarea' },
-            { key: 'miranda', label: 'Права Миранды', type: 'textarea' },
-            { key: 'alibi', label: 'Алиби', type: 'textarea' },
-            { key: 'spontaneousStatements', label: 'Спонтанные заявления', type: 'textarea' },
+            { key: 'statements', label: 'Ключевые заявления / алиби (кратко)', type: 'textarea' },
           ],
         },
         {
           id: 'forensics',
-          title: '4. 🔬 Взаимодействие с криминалистами',
+          title: '5. Взаимодействие с криминалистами',
+          checks: [
+            'Получена/задокументирована документация о теле и уликах',
+            'Личный состав уведомлён о запретах (не курить/не есть/не трогать оборудование и т.д.)',
+            'Электроприборы на месте задокументированы',
+            'Имена всех входивших/выходивших задокументированы',
+          ],
           fields: [
-            { key: 'docCopies', label: 'Копии документов', type: 'textarea' },
-            { key: 'appliances', label: 'Фиксация электроприборов', type: 'textarea' },
-            { key: 'entryExitLog', label: 'Лог входа/выхода', type: 'textarea' },
+            { key: 'notes', label: 'Служебные заметки этапа', type: 'textarea' },
           ],
         },
         {
           id: 'evidence',
-          title: '5. 📦 Взаимодействие с уликами',
+          title: '6. Взаимодействие с уликами',
+          checks: [
+            'Все улики идентифицированы',
+            'Каждой улике присвоен уникальный номер',
+            'Фото места сделаны и также имеют уникальные номера',
+            'Улики задокументированы (изъятие/положение/у кого изъяты)',
+            'Улики хранятся раздельно в корректной упаковке',
+            'Зафиксированы офицер и номер жетона транспортировки улик',
+            'Назначены уникальные номера свидетелей и подозреваемого',
+            'При наличии ДНК/отпечатков выполнена идентификация и запись источника',
+            'При наличии тела: зафиксирован прибытие эксперта/коронера и отчёты',
+            'Проверена окружающая среда на следы крови',
+          ],
           fields: [
-            { key: 'numbering', label: 'Нумерация', type: 'textarea' },
-            { key: 'photos', label: 'Фото', type: 'textarea' },
-            { key: 'packaging', label: 'Упаковка', type: 'textarea' },
-            { key: 'custodyChain', label: 'Цепочка custody', type: 'textarea' },
-            { key: 'dnaPrints', label: 'ДНК/отпечатки', type: 'textarea' },
+            { key: 'evidenceRegistry', label: 'Краткий реестр улик', type: 'textarea' },
           ],
         },
         {
           id: 'witnesses',
-          title: '6. 👁️ Взаимодействие со свидетелями',
+          title: '7. Взаимодействие со свидетелями',
+          checks: [
+            'Собраны контактные данные свидетелей',
+            'Собраны личные данные свидетелей',
+            'Свидетели уведомлены о возможном вызове на допрос',
+            'Обеспечен трансфер в участок при необходимости',
+            'Разъяснена анонимность для суда/подозреваемого',
+            'Разъяснена ответственность за ложные показания',
+            'Разъяснён процессуальный статус свидетеля (не подозреваемый)',
+          ],
           fields: [
-            { key: 'contacts', label: 'Контакты', type: 'textarea' },
-            { key: 'personalData', label: 'Личные данные', type: 'textarea' },
-            { key: 'notifications', label: 'Уведомления', type: 'textarea' },
-            { key: 'anonymityLiability', label: 'Анонимность/Ответственность', type: 'textarea' },
+            { key: 'notes', label: 'Заметки по свидетелям', type: 'textarea' },
           ],
         },
         {
           id: 'finalization',
-          title: '7. ✅ Завершение расследования',
+          title: '8. Завершение расследования',
+          checks: [
+            'Опрос свидетелей завершён',
+            'Допрос завершён',
+            'Рапорт ответственному детективу составлен',
+          ],
           fields: [
-            { key: 'interrogations', label: 'Допросы', type: 'textarea' },
-            { key: 'report', label: 'Рапорт', type: 'textarea' },
             {
               key: 'status',
               label: 'Статус дела',
@@ -355,142 +409,161 @@
                 { value: 'archived', text: 'Архив' },
               ],
             },
+            { key: 'finalReport', label: 'Итоговый рапорт (кратко)', type: 'textarea' },
           ],
         },
       ];
 
       const refs = {
         accordion: document.getElementById('accordion'),
+        caseSelect: document.getElementById('caseSelect'),
         newCaseBtn: document.getElementById('newCaseBtn'),
         duplicateBtn: document.getElementById('duplicateBtn'),
         archiveBtn: document.getElementById('archiveBtn'),
         deleteBtn: document.getElementById('deleteBtn'),
-        caseSelect: document.getElementById('caseSelect'),
-        exportJsonBtn: document.getElementById('exportJsonBtn'),
-        exportReportBtn: document.getElementById('exportReportBtn'),
-        importBtn: document.getElementById('importBtn'),
-        importFile: document.getElementById('importFile'),
         clearBtn: document.getElementById('clearBtn'),
-        caseIdMeta: document.getElementById('caseIdMeta'),
+        exportPdfBtn: document.getElementById('exportPdfBtn'),
+        idMeta: document.getElementById('idMeta'),
         createdMeta: document.getElementById('createdMeta'),
         updatedMeta: document.getElementById('updatedMeta'),
-        progressBar: document.getElementById('progressBar'),
+        statusMeta: document.getElementById('statusMeta'),
         progressText: document.getElementById('progressText'),
-        requiredHint: document.getElementById('requiredHint'),
+        progressBar: document.getElementById('progressBar'),
+        requiredNote: document.getElementById('requiredNote'),
       };
 
-      function nowISO() {
-        return new Date().toISOString();
-      }
+      const state = {
+        cases: [],
+        activeCaseId: null,
+        timer: null,
+      };
 
-      function fmtDate(iso) {
-        if (!iso) return '—';
-        const d = new Date(iso);
-        if (Number.isNaN(d.getTime())) return '—';
-        return d.toLocaleString('ru-RU');
-      }
+      const isoNow = () => new Date().toISOString();
+      const formatDT = (v) => (v ? new Date(v).toLocaleString('ru-RU') : '—');
 
-      function caseTemplate() {
-        const id = String(Date.now());
-        const sections = {};
-        const checklistCompletion = {};
+      function emptyCase() {
+        const model = {
+          id: String(Date.now()),
+          created: isoNow(),
+          updated: isoNow(),
+          status: 'open',
+          sections: {},
+          checklistCompletion: {},
+        };
 
         SECTIONS.forEach((section) => {
-          sections[section.id] = {};
-          checklistCompletion[section.id] = {};
-          section.fields.forEach((field) => {
-            sections[section.id][field.key] = field.key === 'status' ? 'open' : '';
-            checklistCompletion[section.id][field.key] = false;
+          model.sections[section.id] = {};
+          model.checklistCompletion[section.id] = [];
+
+          (section.fields || []).forEach((field) => {
+            model.sections[section.id][field.key] = field.key === 'status' ? 'open' : '';
           });
+
+          (section.checks || []).forEach(() => model.checklistCompletion[section.id].push(false));
         });
 
-        return {
-          id,
-          created: nowISO(),
-          updated: nowISO(),
-          status: 'open',
-          sections,
-          checklistCompletion,
-        };
+        return model;
       }
 
-      function safeParse(json) {
-        try {
-          return JSON.parse(json);
-        } catch {
-          return null;
-        }
-      }
-
-      function loadState() {
+      function load() {
         const raw = localStorage.getItem(STORAGE_KEY);
-        const parsed = raw ? safeParse(raw) : null;
-
-        if (parsed && Array.isArray(parsed.cases)) {
-          STATE.cases = parsed.cases;
-          STATE.activeCaseId = parsed.activeCaseId || parsed.cases[0]?.id || null;
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed.cases)) {
+              state.cases = parsed.cases;
+              state.activeCaseId = parsed.activeCaseId || parsed.cases[0]?.id || null;
+            }
+          } catch {
+            // Игнорируем повреждённое состояние и переинициализируем ниже.
+          }
         }
 
-        if (!STATE.cases.length) {
-          const first = caseTemplate();
-          STATE.cases = [first];
-          STATE.activeCaseId = first.id;
-          persistState();
+        if (!state.cases.length) {
+          const first = emptyCase();
+          state.cases = [first];
+          state.activeCaseId = first.id;
+          saveNow();
         }
       }
 
-      function persistState() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          cases: STATE.cases,
-          activeCaseId: STATE.activeCaseId,
-        }));
+      function saveNow() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ cases: state.cases, activeCaseId: state.activeCaseId }));
+      }
+
+      function scheduleSave() {
+        clearTimeout(state.timer);
+        state.timer = setTimeout(() => {
+          const c = getActiveCase();
+          if (!c) return;
+          c.updated = isoNow();
+          c.status = c.sections.finalization?.status || c.status || 'open';
+          saveNow();
+          renderHeader();
+          renderCaseList();
+        }, SAVE_DELAY);
       }
 
       function getActiveCase() {
-        return STATE.cases.find((c) => c.id === STATE.activeCaseId) || null;
+        return state.cases.find((c) => c.id === state.activeCaseId) || null;
       }
 
-      function computeProgress(current) {
+      function requiredMissing(c) {
+        const g = c.sections.general || {};
+        return !g.victim?.trim() || !g.incidentDate || !g.location?.trim() || !g.detectives?.trim();
+      }
+
+      function calcProgress(c) {
         let total = 0;
         let done = 0;
 
         SECTIONS.forEach((section) => {
-          section.fields.forEach((field) => {
+          (section.checks || []).forEach((_, idx) => {
             total += 1;
-            const value = current.sections?.[section.id]?.[field.key];
-            const checked = Boolean(current.checklistCompletion?.[section.id]?.[field.key]);
-            const filled = typeof value === 'string' ? value.trim().length > 0 : Boolean(value);
-            if (checked || filled) done += 1;
+            if (Boolean(c.checklistCompletion?.[section.id]?.[idx])) done += 1;
+          });
+          (section.fields || []).forEach((f) => {
+            total += 1;
+            const val = c.sections?.[section.id]?.[f.key];
+            const isFilled = typeof val === 'string' ? val.trim().length > 0 : Boolean(val);
+            if (isFilled) done += 1;
           });
         });
 
         return total ? Math.round((done / total) * 100) : 0;
       }
 
-      function requiredMissing(current) {
-        const general = current.sections.general || {};
-        return !general.victim?.trim() || !general.incidentDate || !general.location?.trim() || !general.detective?.trim();
-      }
-
-      function renderCaseSelect() {
+      function renderCaseList() {
         refs.caseSelect.innerHTML = '';
-        STATE.cases.forEach((c) => {
-          const title = c.sections?.general?.victim?.trim() || 'Без имени жертвы';
+        state.cases.forEach((c) => {
           const opt = document.createElement('option');
+          const victim = c.sections?.general?.victim?.trim() || 'Без имени жертвы';
           opt.value = c.id;
-          opt.textContent = `${c.id} • ${title} • ${c.status || 'open'}`;
+          opt.textContent = `${c.id} · ${victim.slice(0, 40)} · ${c.status || 'open'}`;
           refs.caseSelect.appendChild(opt);
         });
-
-        refs.caseSelect.value = STATE.activeCaseId || '';
+        refs.caseSelect.value = state.activeCaseId || '';
       }
 
-      function createField(sectionId, field, value, done) {
-        const wrap = document.createElement('div');
-        wrap.className = 'field';
+      function renderHeader() {
+        const c = getActiveCase();
+        if (!c) return;
+        refs.idMeta.textContent = `ID: ${c.id}`;
+        refs.createdMeta.textContent = `Создан: ${formatDT(c.created)}`;
+        refs.updatedMeta.textContent = `Сохранён: ${formatDT(c.updated)}`;
+        refs.statusMeta.textContent = `Статус: ${c.status || 'open'}`;
+
+        const progress = calcProgress(c);
+        refs.progressText.textContent = `Прогресс: ${progress}%`;
+        refs.progressBar.style.width = `${progress}%`;
+        refs.requiredNote.classList.toggle('show', requiredMissing(c));
+      }
+
+      function createInput(sectionId, field, value) {
+        const fieldWrap = document.createElement('div');
+        fieldWrap.className = 'field';
 
         const label = document.createElement('label');
-        label.htmlFor = `${sectionId}-${field.key}`;
         label.textContent = field.label + (field.required ? ' *' : '');
 
         let control;
@@ -500,10 +573,10 @@
         } else if (field.type === 'select') {
           control = document.createElement('select');
           field.options.forEach((o) => {
-            const option = document.createElement('option');
-            option.value = o.value;
-            option.textContent = o.text;
-            control.appendChild(option);
+            const opt = document.createElement('option');
+            opt.value = o.value;
+            opt.textContent = o.text;
+            control.appendChild(opt);
           });
           control.value = value || field.options[0].value;
         } else {
@@ -512,26 +585,15 @@
           control.value = value || '';
         }
 
-        control.id = `${sectionId}-${field.key}`;
         control.dataset.section = sectionId;
         control.dataset.field = field.key;
-
-        const doneWrap = document.createElement('label');
-        doneWrap.className = 'done';
-        const doneInput = document.createElement('input');
-        doneInput.type = 'checkbox';
-        doneInput.checked = Boolean(done);
-        doneInput.dataset.sectionDone = sectionId;
-        doneInput.dataset.fieldDone = field.key;
-        doneWrap.append(doneInput, document.createTextNode('Выполнено'));
-
-        wrap.append(label, control, doneWrap);
-        return wrap;
+        fieldWrap.append(label, control);
+        return fieldWrap;
       }
 
       function renderForm() {
-        const current = getActiveCase();
-        if (!current) return;
+        const c = getActiveCase();
+        if (!c) return;
 
         refs.accordion.innerHTML = '';
 
@@ -545,167 +607,144 @@
           const body = document.createElement('div');
           body.className = 'section-body';
 
-          section.fields.forEach((field) => {
-            const value = current.sections?.[section.id]?.[field.key] ?? '';
-            const done = current.checklistCompletion?.[section.id]?.[field.key] ?? false;
-            body.appendChild(createField(section.id, field, value, done));
+          if (section.warning) {
+            const w = document.createElement('div');
+            w.className = 'warning-text';
+            w.textContent = section.warning;
+            body.appendChild(w);
+          }
+
+          (section.fields || []).forEach((field) => {
+            const value = c.sections?.[section.id]?.[field.key] || '';
+            body.appendChild(createInput(section.id, field, value));
+          });
+
+          (section.checks || []).forEach((title, index) => {
+            const row = document.createElement('label');
+            row.className = 'check';
+            const check = document.createElement('input');
+            check.type = 'checkbox';
+            check.checked = Boolean(c.checklistCompletion?.[section.id]?.[index]);
+            check.dataset.checkSection = section.id;
+            check.dataset.checkIndex = String(index);
+            const text = document.createElement('span');
+            text.textContent = title;
+            row.append(check, text);
+            body.appendChild(row);
           });
 
           details.append(summary, body);
           refs.accordion.appendChild(details);
         });
-
-        refs.caseIdMeta.textContent = `ID: ${current.id}`;
-        refs.createdMeta.textContent = `Создан: ${fmtDate(current.created)}`;
-        refs.updatedMeta.textContent = `Сохранён: ${fmtDate(current.updated)}`;
-
-        const progress = computeProgress(current);
-        refs.progressBar.style.width = `${progress}%`;
-        refs.progressText.textContent = `${progress}%`;
-        refs.requiredHint.classList.toggle('show', requiredMissing(current));
       }
 
-      function scheduleSave() {
-        clearTimeout(STATE.saveTimer);
-        STATE.saveTimer = setTimeout(() => {
-          const c = getActiveCase();
-          if (!c) return;
-          c.updated = nowISO();
-          const statusVal = c.sections?.finalization?.status || 'open';
-          c.status = statusVal;
-          persistState();
-          renderCaseSelect();
-          renderForm();
-        }, 300);
-      }
-
-      function handleFieldChange(event) {
-        const target = event.target;
+      function onFieldChange(event) {
         const c = getActiveCase();
         if (!c) return;
+        const t = event.target;
 
-        if (target.dataset.section && target.dataset.field) {
-          c.sections[target.dataset.section][target.dataset.field] = target.value;
+        if (t.dataset.section && t.dataset.field) {
+          c.sections[t.dataset.section][t.dataset.field] = t.value;
           scheduleSave();
+          renderHeader();
           return;
         }
 
-        if (target.dataset.sectionDone && target.dataset.fieldDone) {
-          c.checklistCompletion[target.dataset.sectionDone][target.dataset.fieldDone] = target.checked;
+        if (t.dataset.checkSection) {
+          const idx = Number(t.dataset.checkIndex);
+          c.checklistCompletion[t.dataset.checkSection][idx] = t.checked;
           scheduleSave();
+          renderHeader();
         }
       }
 
-      function downloadTextFile(name, content, type) {
-        const blob = new Blob([content], { type });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = name;
-        a.click();
-        URL.revokeObjectURL(url);
+      function row(label, value) {
+        return `<tr><td>${label}</td><td>${value ? String(value).replace(/\n/g, '<br>') : '—'}</td></tr>`;
       }
 
-      function exportCurrentJSON() {
+      /**
+       * Экспорт в PDF реализован нативно: генерируем печатный рапорт
+       * и вызываем окно печати (Save as PDF).
+       */
+      function exportPdf() {
         const c = getActiveCase();
         if (!c) return;
         if (requiredMissing(c)) {
-          alert('Внимание: обязательные поля не заполнены полностью. Экспорт продолжен.');
+          alert('Внимание: обязательные поля заполнены не полностью. Экспорт PDF продолжен.');
         }
-        downloadTextFile(`case_${c.id}.json`, JSON.stringify(c, null, 2), 'application/json;charset=utf-8');
-      }
 
-      function caseToMarkdown(c) {
-        const lines = [];
-        lines.push(`# Рапорт по делу ${c.id}`);
-        lines.push('');
-        lines.push(`- Создан: ${fmtDate(c.created)}`);
-        lines.push(`- Последнее сохранение: ${fmtDate(c.updated)}`);
-        lines.push(`- Статус: ${c.status}`);
-        lines.push('');
+        const htmlSections = SECTIONS.map((section) => {
+          const fieldsRows = (section.fields || []).map((f) => row(f.label, c.sections?.[section.id]?.[f.key])).join('');
+          const checksRows = (section.checks || []).map((text, idx) => row(`☑ ${text}`, c.checklistCompletion?.[section.id]?.[idx] ? 'Выполнено' : 'Не выполнено')).join('');
+          return `
+            <section>
+              <h2>${section.title}</h2>
+              ${section.warning ? `<p class="warn">${section.warning}</p>` : ''}
+              <table>
+                <tbody>
+                  ${fieldsRows}
+                  ${checksRows}
+                </tbody>
+              </table>
+            </section>
+          `;
+        }).join('');
 
-        SECTIONS.forEach((section) => {
-          lines.push(`## ${section.title}`);
-          lines.push('');
-          section.fields.forEach((field) => {
-            const value = c.sections?.[section.id]?.[field.key] ?? '';
-            const done = c.checklistCompletion?.[section.id]?.[field.key] ? '✅' : '⬜';
-            lines.push(`- ${done} **${field.label}:** ${String(value || '—').replace(/\n/g, '  ')}`);
-          });
-          lines.push('');
-        });
+        const report = `<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Case ${c.id}</title>
+<style>
+  body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.35}
+  h1{font-size:20px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em}
+  .meta{font-size:12px;color:#333;margin-bottom:14px}
+  h2{font-size:14px;text-transform:uppercase;border:1px solid #666;padding:6px 8px;margin:16px 0 0;background:#f1f1f1}
+  .warn{font-size:12px;margin:8px 0;color:#2f2f2f}
+  table{width:100%;border-collapse:collapse;margin-top:0}
+  td{border:1px solid #999;padding:6px 8px;vertical-align:top;font-size:12px}
+  td:first-child{width:42%;font-weight:700;background:#fafafa}
+</style>
+</head>
+<body>
+  <h1>Detective Division Investigation Report</h1>
+  <div class="meta">
+    Case ID: ${c.id}<br>
+    Created: ${formatDT(c.created)}<br>
+    Updated: ${formatDT(c.updated)}<br>
+    Status: ${c.status}
+  </div>
+  ${htmlSections}
+</body>
+</html>`;
 
-        return lines.join('\n');
-      }
-
-      function exportCurrentReport() {
-        const c = getActiveCase();
-        if (!c) return;
-        if (requiredMissing(c)) {
-          alert('Внимание: обязательные поля не заполнены полностью. Экспорт продолжен.');
+        const w = window.open('', '_blank');
+        if (!w) {
+          alert('Не удалось открыть окно печати. Разрешите popup для этого файла.');
+          return;
         }
-        const md = caseToMarkdown(c);
-        downloadTextFile(`case_${c.id}_report.md`, md, 'text/markdown;charset=utf-8');
-      }
-
-      function importFromFile(file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const parsed = safeParse(String(reader.result || ''));
-          if (!parsed) {
-            alert('Ошибка: файл не является валидным JSON.');
-            return;
-          }
-
-          const imported = Array.isArray(parsed) ? parsed[0] : (parsed.cases?.[0] || parsed);
-          if (!imported || !imported.id || !imported.sections) {
-            alert('Ошибка: неподдерживаемая структура файла.');
-            return;
-          }
-
-          const merged = caseTemplate();
-          merged.id = String(imported.id);
-          merged.created = imported.created || nowISO();
-          merged.updated = nowISO();
-          merged.status = imported.status || imported.sections?.finalization?.status || 'open';
-
-          SECTIONS.forEach((section) => {
-            merged.sections[section.id] = { ...merged.sections[section.id], ...(imported.sections?.[section.id] || {}) };
-            merged.checklistCompletion[section.id] = {
-              ...merged.checklistCompletion[section.id],
-              ...(imported.checklistCompletion?.[section.id] || {}),
-            };
-          });
-
-          const exists = STATE.cases.some((c) => c.id === merged.id);
-          if (exists) {
-            merged.id = `${merged.id}-${Math.floor(Math.random() * 10000)}`;
-          }
-
-          STATE.cases.unshift(merged);
-          STATE.activeCaseId = merged.id;
-          persistState();
-          renderCaseSelect();
-          renderForm();
-          alert('Импорт выполнен успешно.');
-        };
-        reader.onerror = () => alert('Ошибка чтения файла.');
-        reader.readAsText(file, 'utf-8');
+        w.document.open();
+        w.document.write(report);
+        w.document.close();
+        w.focus();
+        setTimeout(() => w.print(), 250);
       }
 
       function bindEvents() {
         refs.caseSelect.addEventListener('change', () => {
-          STATE.activeCaseId = refs.caseSelect.value;
-          persistState();
+          state.activeCaseId = refs.caseSelect.value;
+          saveNow();
+          renderHeader();
           renderForm();
         });
 
         refs.newCaseBtn.addEventListener('click', () => {
-          const c = caseTemplate();
-          STATE.cases.unshift(c);
-          STATE.activeCaseId = c.id;
-          persistState();
-          renderCaseSelect();
+          const c = emptyCase();
+          state.cases.unshift(c);
+          state.activeCaseId = c.id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
           renderForm();
         });
 
@@ -714,12 +753,13 @@
           if (!c) return;
           const copy = JSON.parse(JSON.stringify(c));
           copy.id = `${Date.now()}-copy`;
-          copy.created = nowISO();
-          copy.updated = nowISO();
-          STATE.cases.unshift(copy);
-          STATE.activeCaseId = copy.id;
-          persistState();
-          renderCaseSelect();
+          copy.created = isoNow();
+          copy.updated = isoNow();
+          state.cases.unshift(copy);
+          state.activeCaseId = copy.id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
           renderForm();
         });
 
@@ -729,50 +769,45 @@
           c.status = 'archived';
           c.sections.finalization.status = 'archived';
           scheduleSave();
+          renderHeader();
+          renderCaseList();
+          renderForm();
         });
 
         refs.deleteBtn.addEventListener('click', () => {
           const c = getActiveCase();
           if (!c) return;
           if (!confirm(`Удалить кейс ${c.id}?`)) return;
-          STATE.cases = STATE.cases.filter((x) => x.id !== c.id);
-          if (!STATE.cases.length) {
-            const first = caseTemplate();
-            STATE.cases = [first];
-          }
-          STATE.activeCaseId = STATE.cases[0].id;
-          persistState();
-          renderCaseSelect();
+          state.cases = state.cases.filter((x) => x.id !== c.id);
+          if (!state.cases.length) state.cases = [emptyCase()];
+          state.activeCaseId = state.cases[0].id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
           renderForm();
         });
 
         refs.clearBtn.addEventListener('click', () => {
-          if (!confirm('Полностью очистить все кейсы из localStorage?')) return;
+          if (!confirm('Очистить все кейсы из localStorage?')) return;
           localStorage.removeItem(STORAGE_KEY);
-          STATE.cases = [];
-          STATE.activeCaseId = null;
-          loadState();
-          renderCaseSelect();
+          state.cases = [emptyCase()];
+          state.activeCaseId = state.cases[0].id;
+          saveNow();
+          renderCaseList();
+          renderHeader();
           renderForm();
         });
 
-        refs.exportJsonBtn.addEventListener('click', exportCurrentJSON);
-        refs.exportReportBtn.addEventListener('click', exportCurrentReport);
+        refs.exportPdfBtn.addEventListener('click', exportPdf);
 
-        refs.importBtn.addEventListener('click', () => refs.importFile.click());
-        refs.importFile.addEventListener('change', (e) => {
-          const file = e.target.files?.[0];
-          if (file) importFromFile(file);
-          refs.importFile.value = '';
-        });
-
-        refs.accordion.addEventListener('input', handleFieldChange);
-        refs.accordion.addEventListener('change', handleFieldChange);
+        refs.accordion.addEventListener('input', onFieldChange);
+        refs.accordion.addEventListener('change', onFieldChange);
       }
 
       function init() {
-        loadState();
-        renderCaseSelect();
+        load();
+        renderCaseList();
+        renderHeader();
         renderForm();
         bindEvents();
       }
